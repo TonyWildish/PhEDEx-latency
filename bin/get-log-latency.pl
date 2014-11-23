@@ -4,22 +4,27 @@ use warnings;
 use Getopt::Long;
 use PHEDEX::Core::DB;
 
-my ($out,$timestamp,$sql,@columns,$dbparam,$now,$self);
-my ($type,$sth,@h,$i,$verbose,$debug,$help,$root);
+my ($out,$timestamp,$sql,@columns,$dbparam,$now,$self,$type);
+my ($sth,@h,$i,$verbose,$debug,$help,$root,@files,$file);
+my ($max_interval);
+
+$max_interval = 120 * 86400; # dump ~1/3 a year at a time.
+$timestamp = 1356994800; # 00:00:00, Jan 1st 2013
+$type = "block";
 $verbose = $debug = $help = 0;
-$root = '/afs/cern.ch/user/w/wildish/work/public/Data/BlockLatency';
-$type = 'block';
+$root = "/afs/cern.ch/user/w/wildish/work/public/Data/BlockLatency";
 GetOptions(
 	    'dbparam=s'	  => \$dbparam,
-	    # 'timestamp=i' => \$timestamp,
 	    'type=s'	    => \$type,
-      'root=s'      => \$root,
+            'root=s'        => \$root,
 	    'verbose'	    => \$verbose,
-	    'debug'	      => \$debug,
-	    'help'	      => \$help,
+	    'debug'	    => \$debug,
+	    'help'	    => \$help,
 	  );
 
-$ENV{TNS_ADMIN} = '/afs/cern.ch/project/oracle/admin';
+if ( !defined($ENV{TNS_ADMIN}) ) {
+  $ENV{TNS_ADMIN} = '/afs/cern.ch/project/oracle/admin';
+}
 
 sub usage {
   print <<EOF;
@@ -35,7 +40,6 @@ existing files and takes the highest timestamp there as the starting time.
 
 EOF
 }
-
 if ( $help ) {
   usage();
   exit 0;
@@ -43,10 +47,21 @@ if ( $help ) {
 if ( !defined($dbparam) ) {
   die "--dbparam is obligatory (with Prod/Reader is a good choice)\n";
 }
+if ( !defined($type) ) {
+  die "--type is obligatory\n";
+}
 if ( $type ne 'file' && $type ne 'block' ) {
   die "--type must be one of 'file|block'\n";
 }
 $now = time();
+
+# Find the timestamp:
+if ( @files = glob("$type*csv.gz") ) {
+  $file = (sort(@files))[-1];
+  $file =~ m%^${type}_latency-(\d+).csv.gz%;
+  $timestamp = $1;
+  if ( !$timestamp ) { die "Cannot calculate timestamp from existing files...\n"; }
+}
 
 if ( $type eq 'file' ) {
   @columns = qw (
@@ -70,7 +85,7 @@ if ( $type eq 'file' ) {
     time_at_destination
   );
   $sql = "select " .  join(', ',@columns) .
-         " from t_log_file_latency where time_update > $timestamp";
+         " from t_log_file_latency where time_update >= $timestamp";
 } else {
   @columns = qw (
     time_update
@@ -97,9 +112,17 @@ if ( $type eq 'file' ) {
     latency
   );
   $sql = "select " .  join(', ',@columns) .
-         " from t_log_block_latency where time_update > $timestamp";
+         " from t_log_block_latency where time_update >= $timestamp";
 }
 
+if ( $now - $timestamp < 86400 ) {
+  print "Not worth running, it's less than a day since the last run\n";
+  exit(0);
+}
+if ( $now - $timestamp > $max_interval ) {
+  $now = $timestamp + $max_interval
+}
+$sql .= " and time_update < $now";
 $out = "${type}_latency-$now.csv.gz";
 $self = { DBCONFIG => $dbparam };
 $self->{DBH} = PHEDEX::Core::DB::connectToDatabase($self);
@@ -110,7 +133,7 @@ print OUT join(',',@columns),"\n";
 $i = 0;
 select STDOUT; $|=1;
 while ( @h = $sth->fetchrow() ) {
-  if ( ! (++$i % 1000) ) { print "$i  \r"; }
+  if ( ! (++$i % 1000) ) { print "  $i  \r"; }
   foreach ( @h ) {
     $_ = '' unless defined $_;
     print OUT $_,',';
