@@ -6,6 +6,6 @@ There is a *bin* directory which holds a *get-log-latency.pl* script, and a *dat
 
 You can update the data with fresh results by running:
 
-get-log-latency.pl --root <path to data files> --dbparam <path to your DBParam>
+get-log-latency.pl --root path_to_data_files --dbparam path_to_your_DBParam
 
 Your DBParam must have read access to the PhEDEx database, and you need to run this from a machine with the PhEDEx environment set up. The script will look at the files in your directory, take the latest timestamp, and get new data from that time onwards.
