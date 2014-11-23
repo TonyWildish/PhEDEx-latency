@@ -8,7 +8,7 @@ my ($out,$timestamp,$sql,@columns,$dbparam,$now,$self);
 my ($type,$sth,@h,$i,$verbose,$debug,$help,$root);
 $verbose = $debug = $help = 0;
 $root = '/afs/cern.ch/user/w/wildish/work/public/Data/BlockLatency';
-type = 'block';
+$type = 'block';
 GetOptions(
 	    'dbparam=s'	  => \$dbparam,
 	    # 'timestamp=i' => \$timestamp,
