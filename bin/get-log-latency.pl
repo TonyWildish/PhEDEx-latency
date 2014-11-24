@@ -14,12 +14,12 @@ $type = "block";
 $verbose = $debug = $help = 0;
 $root = "/afs/cern.ch/user/w/wildish/work/public/Data/BlockLatency";
 GetOptions(
-	    'dbparam=s'	 => \$dbparam,
-	    'type=s'	   => \$type,
+      'dbparam=s'	 => \$dbparam,
+      'type=s'	   => \$type,
       'root=s'     => \$root,
-	    'verbose'	   => \$verbose,
-	    'debug'	     => \$debug,
-	    'help'	     => \$help,
+      'verbose'	   => \$verbose,
+      'debug'	     => \$debug,
+      'help'	     => \$help,
 	  );
 
 if ( !defined($ENV{TNS_ADMIN}) ) {
@@ -56,6 +56,7 @@ if ( $type ne 'file' && $type ne 'block' ) {
 $now = time();
 
 # Find the timestamp:
+chdir $root or die "Cannot cd $root: $!\n";
 if ( @files = glob("$type*csv.gz") ) {
   $file = (sort(@files))[-1];
   $file =~ m%^${type}_latency-(\d+).csv.gz%;
@@ -134,10 +135,11 @@ if ( $now - $timestamp > $max_interval ) {
   $now = $timestamp + $max_interval
 }
 $sql .= " and time_update < $now";
-$out = $root . "/${type}_latency-$now.csv.gz";
+$out = "${type}_latency-$now.csv.gz";
 $sth = $self->{DBH}->prepare($sql);
 $sth->execute();
 open OUT, "| gzip - > $out" or die "$out: $!\n";
+print "Writing to ",$out,"\n";
 push @columns,('src_tier','dst_tier');
 print OUT join(',',@columns),"\n";
 $i = 0;
