@@ -63,6 +63,10 @@ if ( @files = glob("$type*csv.gz") ) {
   $timestamp = $1;
   if ( !$timestamp ) { die "Cannot calculate timestamp from existing files...\n"; }
 }
+if ( $now - $timestamp < 86400 ) {
+  print "Not worth running, it's less than a day since the last run\n";
+  exit(0);
+}
 
 # First get the list of nodes...
 $sql = qq( select id, name from t_adm_node);
@@ -125,16 +129,12 @@ if ( $type eq 'file' ) {
   );
   $sql = "select " . join(', ',@columns) .
          " from t_log_block_latency where time_update >= $timestamp";
+  if ( $now - $timestamp > $max_interval ) {
+    $now = $timestamp + $max_interval
+  }
+  $sql .= " and time_update < $now";
 }
 
-if ( $now - $timestamp < 86400 ) {
-  print "Not worth running, it's less than a day since the last run\n";
-  exit(0);
-}
-if ( $now - $timestamp > $max_interval ) {
-  $now = $timestamp + $max_interval
-}
-$sql .= " and time_update < $now";
 $out = "${type}_latency-$now.csv.gz";
 $sth = $self->{DBH}->prepare($sql);
 $sth->execute();
@@ -156,6 +156,9 @@ while ( @h = $sth->fetchrow() ) {
     }
     print OUT ',',$nodes{$h[1]},',',$nodes{$h[17]},"\n";
   } else {
+    if ( !defined($nodes{$h[10]}) ) { # Some 'destination' nodes are not defined???
+      $nodes{$h[10]} = -1;
+    }
     print OUT $nodes{$h[2]},',',$nodes{$h[10]},"\n";
   }
 }
