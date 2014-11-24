@@ -1,4 +1,4 @@
-if ( !file.exists('cache/block.latency.RData') ) {
+if ( !file.exists('cache/sel.lClass.slow.RData') ) {
 
   # create a factor variable to denote slow or stuck tails
   print("Create selectors for OK/slow/stuck/unknown latencies")
@@ -17,7 +17,7 @@ if ( !file.exists('cache/block.latency.RData') ) {
   rm(s)
   print(paste("OK:",     sum(sel.lClass.OK)))
   print(paste("slow:",   sum(sel.lClass.slow)))
-  print(paste("stuck:",  sum(sel.lClass.Ostuck))
+  print(paste("stuck:",  sum(sel.lClass.stuck)))
   print(paste("unknown:",sum(sel.lClass.unknown)))
 
   print("Caching results")
@@ -25,4 +25,4 @@ if ( !file.exists('cache/block.latency.RData') ) {
   cache('sel.lClass.stuck')
   cache('sel.lClass.unknown')
   cache('block.latency')
-}
+} else { print("Selection-classes: nothing to do here...") }
