@@ -6,7 +6,7 @@ use PHEDEX::Core::DB;
 
 my ($out,$timestamp,$sql,@columns,$dbparam,$now,$self,$type);
 my ($sth,@h,$i,$verbose,$debug,$help,$root,@files,$file);
-my ($max_interval);
+my ($max_interval,%nodes,@node);
 
 $max_interval = 120 * 86400; # dump ~1/3 a year at a time.
 $timestamp = 1356994800; # 00:00:00, Jan 1st 2013
@@ -61,6 +61,17 @@ if ( @files = glob("$type*csv.gz") ) {
   $file =~ m%^${type}_latency-(\d+).csv.gz%;
   $timestamp = $1;
   if ( !$timestamp ) { die "Cannot calculate timestamp from existing files...\n"; }
+}
+
+# First get the list of nodes...
+$sql = qq( select id, name from t_adm_node);
+$self = { DBCONFIG => $dbparam };
+$self->{DBH} = PHEDEX::Core::DB::connectToDatabase($self);
+$sth = $self->{DBH}->prepare($sql);
+$sth->execute();
+while ( @node = $sth->fetchrow() ) {
+  $node[1] =~ m%^X?T(\d)_%;
+  $nodes{$node[0]} = $1;
 }
 
 if ( $type eq 'file' ) {
@@ -123,21 +134,28 @@ if ( $now - $timestamp > $max_interval ) {
   $now = $timestamp + $max_interval
 }
 $sql .= " and time_update < $now";
-$out = "${type}_latency-$now.csv.gz";
-$self = { DBCONFIG => $dbparam };
-$self->{DBH} = PHEDEX::Core::DB::connectToDatabase($self);
+$out = $root . "/${type}_latency-$now.csv.gz";
 $sth = $self->{DBH}->prepare($sql);
 $sth->execute();
 open OUT, "| gzip - > $out" or die "$out: $!\n";
+push @columns,('src_tier','dst_tier');
 print OUT join(',',@columns),"\n";
 $i = 0;
 select STDOUT; $|=1;
 while ( @h = $sth->fetchrow() ) {
-  if ( ! (++$i % 1000) ) { print "  $i  \r"; }
+  if ( ! (++$i % 10000) ) { print "  $i  \r"; }
   foreach ( @h ) {
     $_ = '' unless defined $_;
   }
-  print OUT join(',',@h),"\n";
+  print OUT join(',',@h);
+  if ( $type eq 'block' ) {
+    if ( !defined($nodes{$h[17]}) ) { # Some 'destination' nodes are not defined???
+      $nodes{$h[17]} = -1;
+    }
+    print OUT ',',$nodes{$h[1]},',',$nodes{$h[17]},"\n";
+  } else {
+    print OUT $nodes{$h[2]},',',$nodes{$h[10]},"\n";
+  }
 }
 close OUT;
 PHEDEX::Core::DB::disconnectFromDatabase($self, $self->{DBH}, 1);
