@@ -14,12 +14,12 @@ $type = "block";
 $verbose = $debug = $help = 0;
 $root = "/afs/cern.ch/user/w/wildish/work/public/Data/BlockLatency";
 GetOptions(
-	    'dbparam=s'	  => \$dbparam,
-	    'type=s'	    => \$type,
-            'root=s'        => \$root,
-	    'verbose'	    => \$verbose,
-	    'debug'	    => \$debug,
-	    'help'	    => \$help,
+	    'dbparam=s'	 => \$dbparam,
+	    'type=s'	   => \$type,
+      'root=s'     => \$root,
+	    'verbose'	   => \$verbose,
+	    'debug'	     => \$debug,
+	    'help'	     => \$help,
 	  );
 
 if ( !defined($ENV{TNS_ADMIN}) ) {
@@ -111,7 +111,7 @@ if ( $type eq 'file' ) {
     total_suspend_time
     latency
   );
-  $sql = "select " .  join(', ',@columns) .
+  $sql = "select " . join(', ',@columns) .
          " from t_log_block_latency where time_update >= $timestamp";
 }
 
@@ -136,9 +136,8 @@ while ( @h = $sth->fetchrow() ) {
   if ( ! (++$i % 1000) ) { print "  $i  \r"; }
   foreach ( @h ) {
     $_ = '' unless defined $_;
-    print OUT $_,',';
   }
-  print OUT "\n";
+  print OUT join(',',@h),"\n";
 }
 close OUT;
 PHEDEX::Core::DB::disconnectFromDatabase($self, $self->{DBH}, 1);
