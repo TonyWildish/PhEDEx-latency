@@ -1,4 +1,5 @@
-Here e have just few scripts that get the block latency data, parse corresponding csv files, aggregates other info, add derived fields and tags.
+Here e have just few scripts that get the block latency data, parse corresponding csv files, aggregates other info, add derived fields and tags. 
+[Here you can find data up to 09/02/2015](http://llr.in2p3.fr/~sartiran/data_PhEDEx_latency/). If you want to create the data by yourself see below.
 
 ###### Quick how-to 
 
