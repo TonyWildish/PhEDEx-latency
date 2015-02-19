@@ -1,7 +1,9 @@
 Here e have just few scripts that get the block latency data, parse corresponding csv files, aggregates other info, add derived fields and tags. 
 [Here you can find data up to 09/02/2015](http://llr.in2p3.fr/~sartiran/data_PhEDEx_latency/). If you want to create the data by yourself see below.
 
-###### Quick how-to 
+### Quick how-to
+
+#### Getting Data
 
 put yourself in the `PhEDEx-latency/Andrea` directory. Then run
 
@@ -15,6 +17,8 @@ iterate until you have recovered all the data. Then recover nodes and blocks inf
 src/get-log-nodes.pl --dbparam=<DBPARAMS>
 src/get-log-blocks.pl --dbparam=<DBPARAMS>
 ```
+
+#### Processing Data
 
 and run the following processing steps:
 ```
