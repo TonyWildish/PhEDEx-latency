@@ -1,0 +1,7 @@
+Possible sources of latency, the signals we are looking for
+- tails in large blocks due to stuck files
+- small stuck blocks in large datasets with many blocks
+- blocks that get stuck early in their transfer
+- as many others as we can think of!
+
+(Everyone!)
