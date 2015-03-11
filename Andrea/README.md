@@ -14,8 +14,8 @@ src/get-log-latency.pl --dbparam=<DBPARAMS>
 iterate until you have recovered all the data. Then recover nodes and blocks info.
 
 ```
-src/get-log-nodes.pl --dbparam=<DBPARAMS>
-src/get-log-blocks.pl --dbparam=<DBPARAMS>
+src/get-nodes.pl --dbparam=<DBPARAMS>
+src/get-blocks.pl --dbparam=<DBPARAMS>
 ```
 
 #### Processing Data
@@ -90,10 +90,10 @@ which will create `data/block_latency-tagged.csv` adding some tags to each entry
         1st_req: block opened while 1st request
         1st_rep: block opened while 1st replica
         25perc: block opened while 25%  transferred
-        25perc: block opened while 50%  transferred
-        25perc: block opened while 75%  transferred
-        25perc: block opened while 95%  transferred
-        25perc: last opened while last replica done
+        50perc: block opened while 50%  transferred
+        75perc: block opened while 75%  transferred
+        95perc: block opened while 95%  transferred
+        last: last opened while last replica done
 
 
 'exclude_tag' : this just tags some entries which we may want o exclude for one reason or another. The value is excluded:<reason>
