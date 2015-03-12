@@ -1,5 +1,5 @@
 Here e have just few scripts that get the block latency data, parse corresponding csv files, aggregates other info, add derived fields and tags. 
-[Here you can find data up to 09/02/2015](http://llr.in2p3.fr/~sartiran/data_PhEDEx_latency/). If you want to create the data by yourself see below.
+[Here you can find data up to 09/02/2015](http://llr.in2p3.fr/~sartiran/data_PhEDEx_latency/) and [here you can find data up to 11/03/2015 with the new variables defined](http://llr.in2p3.fr/~sartiran/data_PhEDEx_latency_v2/). If you want to create the data by yourself see below.
 
 ### Quick how-to
 
@@ -51,6 +51,18 @@ will create `data/block_latency-rejected.csv` with the ill defined entries. The 
 'skew_50' --> ..idem
 'skew_75' --> ..idem
 'skew_95' --> ..idem 
+'rskew_25' --> (time spent transferring the FIRST 25 percent of the files) / (time spent transferring the FIRST X percent of the files) times X/25 with X=25 
+'rskew_50' --> (time spent transferring the FIRST 25 percent of the files) / (time spent transferring the FIRST X percent of the files) times X/25 with X=50 
+'rskew_75' --> (time spent transferring the FIRST 25 percent of the files) / (time spent transferring the FIRST X percent of the files) times X/25 with X=75 
+'rskew_95' --> (time spent transferring the FIRST 25 percent of the files) / (time spent transferring the FIRST X percent of the files) times X/25 with X=95
+'skew_last_5' --> (time spent transferring the LAST 5 percent of the files) / (time spent transferring the LAST X percent of the files) times X/5 with X=5
+'skew_last_25' --> (time spent transferring the LAST 5 percent of the files) / (time spent transferring the LAST X percent of the files) times X/5 with X=25
+'skew_last_50' --> (time spent transferring the LAST 5 percent of the files) / (time spent transferring the LAST X percent of the files) times X/5 with X=50
+'skew_last_75' --> (time spent transferring the LAST 5 percent of the files) / (time spent transferring the LAST X percent of the files) times X/5 with X=75
+'rskew_last_5' --> (time spent transferring the FIRST 25 percent of the files) / (time spent transferring the LAST X percent of the files) times X/25 with X=5
+'rskew_last_25' --> (time spent transferring the FIRST 25 percent of the files) / (time spent transferring the LAST X percent of the files) times X/25 with X=25
+'rskew_last_50' --> (time spent transferring the FIRST 25 percent of the files) / (time spent transferring the LAST X percent of the files) times X/25 with X=50
+'rskew_last_75' --> (time spent transferring the FIRST 25 percent of the files) / (time spent transferring the LAST X percent of the files) times X/25 with X=75
 ```
 
 Then we can run 
@@ -99,6 +111,9 @@ which will create `data/block_latency-tagged.csv` adding some tags to each entry
 'exclude_tag' : this just tags some entries which we may want o exclude for one reason or another. The value is excluded:<reason>
                         values for <reasons> are (we keep the last that matches):
                               - infskewX: the skew_Y with Y<=X has "infinite" value
+                              - infrskewX: the rskew_Y with Y<=X has "infinite" value
+                              - infskew_lastX: the skew_last_Y with Y<=X has "infinite" value
+                              - infrskew_lastX: the rskew_last_Y with Y<=X has "infinite" value
                               - short: transfer took less than 3 hours
                               - susp: the transfer was suspended for some time
                               - small: transfers with less than 5 files
