@@ -1,5 +1,5 @@
 csvData <- read.csv(file="block_latency-tagged.csv", head=TRUE, sep=",")
-pdf("plots.pdf")
+pdf("large_block.pdf")
 par(mfrow=c(2,2))
 
 GB <- 10^9
