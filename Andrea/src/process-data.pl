@@ -34,6 +34,18 @@ my @new_fields=(
 'skew_50',
 'skew_75',
 'skew_95',
+'rskew_25',
+'rskew_50',
+'rskew_75',
+'rskew_95',
+'skew_last_5',
+'skew_last_25',
+'skew_last_50',
+'skew_last_75',
+'rskew_last_5',
+'rskew_last_25',
+'rskew_last_50',
+'rskew_last_75',
 );
 
 open INFILE, "${datadir}/block_latency-aggregated.csv" ;
@@ -141,16 +153,32 @@ while(<INFILE>){
 
     $FIELDS{avg_file_size}=($FIELDS{bytes}*1.0)/($FIELDS{files}*1.0);
 
-#The swek variables
-
+#The swek and rskew variables
     foreach my $item ('25','50','75','95'){
 
 	if((1*$FIELDS{'percent'.$item.'_replica'}-1*$FIELDS{'first_replica'})==0){
 	    $FIELDS{'skew_'.$item}='skew_'.$item.'_infinite';
+	    $FIELDS{'rskew_'.$item}='rskew_'.$item.'_infinite';
 	}else{
 
 	    $FIELDS{'skew_'.$item}=($item*1.0*($FIELDS{'last_replica'} - $FIELDS{'percent95_replica'}))/(5.0*($FIELDS{'percent'.$item.'_replica'}-$FIELDS{'first_replica'}));
+	    $FIELDS{'rskew_'.$item}=($item*1.0*($FIELDS{'percent25_replica'}-$FIELDS{'first_replica'}))/(25.0*($FIELDS{'percent'.$item.'_replica'}-$FIELDS{'first_replica'}));
 	}
+    }
+
+#The skew_last and rskew_last variables
+    foreach my $item ('5','25','50','75'){
+
+	my $complem=100-1*$item;
+
+        if((1*$FIELDS{'last_replica'}-1*$FIELDS{'percent'.$complem.'_replica'})==0){
+            $FIELDS{'skew_last_'.$item}='skew_last_'.$item.'_infinite';
+            $FIELDS{'rskew_last_'.$item}='rskew_last_'.$item.'_infinite';
+        }else{
+
+            $FIELDS{'skew_last_'.$item}=($item*1.0*($FIELDS{'last_replica'} - $FIELDS{'percent95_replica'}))/(5.0*($FIELDS{'last_replica'}-$FIELDS{'percent'.$complem.'_replica'}));
+            $FIELDS{'rskew_last_'.$item}=($item*1.0*($FIELDS{'percent25_replica'}-$FIELDS{'first_replica'}))/(25.0*($FIELDS{'last_replica'}-$FIELDS{'percent'.$complem.'_replica'}));
+        }
     }
 
 #   Printout the line

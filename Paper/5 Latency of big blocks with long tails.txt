@@ -1,0 +1,4 @@
+What could be the cause?
+How might we detect it?
+- What variables could we look at, what plots could we make?
+- How might we filter the final data to get a clear signal?

@@ -133,6 +133,17 @@ while(<INFILE>){
 	if($FIELDS{'skew_'.$item} eq 'skew_'.$item.'_infinite') {
 	    $FIELDS{exclude_tag}='excluded:infskew'.$item;
 	}
+	if($FIELDS{'rskew_'.$item} eq 'rskew_'.$item.'_infinite') {
+	    $FIELDS{exclude_tag}='excluded:infrskew'.$item;
+	}
+    }
+    foreach my $item ('5','25','50','75'){
+	if($FIELDS{'skew_last_'.$item} eq 'skew_last_'.$item.'_infinite') {
+	    $FIELDS{exclude_tag}='excluded:infskew_last'.$item;
+	}
+	if($FIELDS{'rskew_last_'.$item} eq 'rskew_last_'.$item.'_infinite') {
+	    $FIELDS{exclude_tag}='excluded:infrskew_last'.$item;
+	}
     }
 
     if( $FIELDS{eff_avg_rate} eq 'infinite_eff_rate'){
