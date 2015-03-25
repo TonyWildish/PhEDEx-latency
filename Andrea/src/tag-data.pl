@@ -21,8 +21,11 @@ my @new_fields=(
 'transfer_type_tag',
 'files_number_tag',
 'files_size_tag',
+'block_size_tag',
 'exclude_tag',
 'while_open_tag',
+'latency_tag',
+'tiers_tag',
 );
 
 open OUTFILE, ">${datadir}/block_latency-tagged.csv";
@@ -85,6 +88,21 @@ while(<INFILE>){
 	    $FIELDS{files_size_tag}=$size.'Msize';
 	}
     }
+
+
+#Files block_size tag
+    $FIELDS{block_size_tag}='bigblock';
+    for my $size (500,300,100){
+	if($FIELDS{bytes} <= $size*1048576*1024){
+	    $FIELDS{block_size_tag}=$size.'Gblock_size';
+	}
+    }
+
+ ##   for my $size (500,100){
+##	if($FIELDS{block_size} <= $size*1048576){
+##	    $FIELDS{files_size_tag}=$size.'Msize';
+##	}
+##    }
 
 
 
@@ -167,6 +185,27 @@ while(<INFILE>){
 	$FIELDS{exclude_tag}='excluded:bunny';
     } 
 
+#Latency Tag
+    my $dummy='';
+
+    if( ($FIELDS{last_replica} - $FIELDS{percent95_replica}) > (10*3600 + (1.0*$FIELDS{bytes}/20.0)/(5.0*1048576))){
+	$dummy.=':late';
+    }
+
+    if($FIELDS{first_replica_delta} > (10*3600 + (($FIELDS{avg_file_size}*1.0)/(5.0*1048576)))){
+	$dummy.=':early';
+    }
+
+    if($dummy eq ''){
+	$dummy=':none';
+    }
+
+    $FIELDS{latency_tag}='latency'.$dummy;
+
+# Tiers Tag
+    $FIELDS{tiers_tag}='T'.$FIELDS{src_tier}.'->'.'T'.$FIELDS{dst_tier};
+
+    
 #   Printout the line
     print OUTFILE $FIELDS{$new_headers[0]};
 
