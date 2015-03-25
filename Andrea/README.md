@@ -95,6 +95,10 @@ which will create `data/block_latency-tagged.csv` adding some tags to each entry
 'files_size_tag' : a tag characterizing the blocks by the average size of the files they have in.
                           value is Xfiles for an average size <= X with X=10G,5G,2G,1G,500M,100M
                           blocks with an average size of more than 10GB are tagged 'bigfiles'
+                          
+'block_size_tag' : a tag characterizing the blocks by its total size of the files they have in.
+                          value is Xblock_size for an total size <= X with X=500G,300G,100G,
+                          blocks with an average size of more than 500GB are tagged 'bigblock'
 
 'while_open_tag' : which has values while_open:X with X:
         none: block closed before subscription
@@ -120,9 +124,14 @@ which will create `data/block_latency-tagged.csv` adding some tags to each entry
                               - bunny: BUNNIES blocks
                         all the others are marked excluded:ok
 
-```
+'latency_tag' : this just tags entries with some type of latency. The value is latency:<type>
+                         values for <type> are
+                              - late : if (last_replica - percent95_replica) > (10h + (bytes/20.0)/(5MB/s))
+                              - early : if (first_replica_delta > (10h + avg_file_size/5MB/s)
+                              - late:early : if both the conditions above are satisfied
+                              - none : if none of the above conditions is satisfied 
 
-Then we can run 
+Then we can run
 
 ```
 src/count.pl
@@ -131,3 +140,8 @@ src/mkhysto.pl
 
 and we get a file `data/block_latency-hysto.csv` with 1 line for each tag combination and, for each line, the total number of entries/files/bytes matching that tag combination.
 
+#### Drawing Plots
+
+```
+Rscript src/hystos.r
+```
