@@ -8,7 +8,7 @@ cols <- c("green","yellow","blue","red")
 # limits which will be used while classifying the input data
 LIMIT_STUCK_EARLY <- 10*3600
 LIMIT_STUCK_LATE <- 10*3600
-LIMIT_SIZE <- 300*GB
+LIMIT_SIZE <- 500*GB
 
 # average transfer rate which will be used to add some offset while getting the tails
 AVERAGE_TRANSFER_RATE <- 5*10^6 #5MB/s
