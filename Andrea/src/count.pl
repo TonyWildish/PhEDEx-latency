@@ -21,9 +21,11 @@ my @new_fields=(
 'transfer_type_tag',
 'files_number_tag',
 'files_size_tag',
+'block_size_tag',
 'exclude_tag',
 'while_open_tag',
-
+'latency_tag',
+'tiers_tag',
 #Counters
 #'num_txfs',
 #'num_files',

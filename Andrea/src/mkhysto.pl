@@ -14,8 +14,11 @@ my @new_fields=(
 'transfer_type_tag',
 'files_number_tag',
 'files_size_tag',
+'block_size_tag',
 'exclude_tag',
 'while_open_tag',
+'latency_tag',
+'tiers_tag',
     );
 
 my @counters=(
@@ -64,10 +67,20 @@ for my $is_custodial (keys(%{$ptr})){
 			my $ptr6=$ptr5->{$exclude_tag};
 			for my $while_open_tag (keys(%{$ptr6})){
 			    my $ptr7=$ptr6->{$while_open_tag};
-			    my @line=($is_custodial,$data_type_tag,$transfer_type_tag,$files_number_tag,$files_size_tag,$exclude_tag,$while_open_tag);
-			    my @values=($ptr7->{count},$ptr7->{files},$ptr7->{bytes});
-			    push(@line,@values);
-			    print OUTFILE join(',',@line),"\n";
+			    for my $block_size_tag (keys(%{$ptr7})){
+				my $ptr8=$ptr7->{$block_size_tag};
+				for my $latency_tag (keys(%{$ptr8})){
+				    my $ptr9=$ptr8->{$latency_tag};
+				    for my $tiers_tag (keys(%{$ptr9})){
+					my $ptr10=$ptr9->{$tiers_tag};
+				    
+					my @line=($is_custodial,$data_type_tag,$transfer_type_tag,$files_number_tag,$files_size_tag,$exclude_tag,$while_open_tag,$block_size_tag,$latency_tag,$tiers_tag);
+					my @values=($ptr10->{count},$ptr10->{files},$ptr10->{bytes});
+					push(@line,@values);
+					print OUTFILE join(',',@line),"\n";
+				    }
+				}
+			    }
 			}
 		    }
 		}

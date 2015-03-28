@@ -1,4 +1,4 @@
-csvData <- read.csv(file="../block_latency-tagged.csv", head=TRUE, sep=",")
+csvData <- read.csv(file="data/block_latency-tagged.csv", head=TRUE, sep=",")
 pdf("tails.pdf")
 par(mfrow=c(2,2))
 
