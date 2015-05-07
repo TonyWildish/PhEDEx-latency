@@ -8,3 +8,8 @@ What final selection do we use (after playing with the 'exclude' variables)?
 
 Numbers for how this filtering affects the amount of data we have to play with, what fraction of CMS physics data is represented in our final sample, stuff like that...
 (Andrea, Meric?)
+
+
+* skew X:  (time spent transferring the LAST 5 percent of the files) / (time spent transferring the FIRST X percent of the files) times X/5
+* skew last X: (time spent transferring the LAST 5 percent of the files) / (time spent transferring the LAST X percent of the files) times X/5
+* reverse skew last 5: (time spent transferring the FIRST 25 percent of the files) / (time spent transferring the LAST X percent of the files) times X/25
