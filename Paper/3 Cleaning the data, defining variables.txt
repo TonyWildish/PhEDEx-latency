@@ -13,3 +13,84 @@ Numbers for how this filtering affects the amount of data we have to play with, 
 * skew X:  (time spent transferring the LAST 5 percent of the files) / (time spent transferring the FIRST X percent of the files) times X/5
 * skew last X: (time spent transferring the LAST 5 percent of the files) / (time spent transferring the LAST X percent of the files) times X/5
 * reverse skew last 5: (time spent transferring the FIRST 25 percent of the files) / (time spent transferring the LAST X percent of the files) times X/25
+
+Draft of the section:
+
+In the last two years, thanks to the instrumentation detailed in the
+previous session, the PhEDEX system collected records about the
+latency of roughly 3 million block subscriptions.  This data include
+several useful informations:
+
+  * block informations: block, number of files, size, timestamps of
+    the block opening and closing;
+
+  * subscription informations: destination site, custodiality flag,
+    total time of suspension, creation date of the subscription,
+    priority;
+
+  * source sites informations: site from which most files where
+    transferred and number of files transferred from this site;
+
+  * informations about the transfer execution: timestamps of the first
+    request, the first transfer, the 25%/50%/75%/95% completion and of
+    the last transfer. The total number of transfers attempts.
+
+This huge amount of records represents the raw input of our
+analysis. Before starting the actual analytic work, however, this set
+of data has to undergo some cleaning and processing steps in order to
+remove the items of no interest and define useful derived observables.
+
+First of all we cleaned ill defined data, that is records with missing
+or inconsistent entries. These are mostly issued from test transfers
+and represent roughly the 5% of the total amount.
+
+In the remaining set there are roughly 780,000 transfers that took
+place while the block was still open and growing in size. These would
+actually be well defined targets for our analysis but their treatment
+may render the whole process uselessly complex. Therefore, for the
+time being, we decided to remove these entries from the set. For the
+same reason we decided to remove all the 62,000 transfers entries
+which have been suspended during their execution.
+
+We also defined a cutoff of 3 hours on the transfer time. The idea
+behind this choice is that, seen the typical time scale of data
+transfers in CMS, if a transfer takes less than 3 hours from the
+subscription to the completion we can, arbitrarily but sensibly, argue
+that it is not a candidate for having latency problems. This cutoff
+removes roughly 960,000 items.
+
+At this point we are left with 1 million transfers records among which
+we have to point out those having latency issues.  In order to
+determine the signal of a latency problem we defined few "skew"
+variables showing the transfer rate ratio between the time spent in a
+small portion (last 5% or first 25%) and the X percent from the
+beginning or to the end of a transfer.  More precisely, we define the
+following 4 sets of variables
+
+ * skew X: (time spent transferring the LAST 5 percent of the files) /  (time spent transferring the FIRST X percent of the files) times X/5 
+   where X is 25/50/75/95
+
+ * skew last X: (time spent transferring the LAST 5 percent of the files) / (time spent transferring the LAST X percent of the files) times X/5 
+   where X is 25/50/75
+
+ * reverse skew  X: (time spent transferring the FIRST 25 percent of the files) / (time spent transferring the FIRST X percent of the files) times X/25 
+   where X is 50/75/95
+
+ * reverse skew last X: (time spent transferring the FIRST 25 percent of the files) / (time spent transferring the LAST X percent of the files) times X/25 
+   where X is 5/25/50/75
+
+On a transfer which is ideally running at a constant rate all these
+variables have value one. Thus, one or more of the "skew" variables
+that significantly differs from unity can be considered a good signal
+of a transfer having latency issues. In particular this is the signal
+of a latency "tail" in a generalized sense, that is a section of the
+transfer which has been significantly slower than the others.
+
+This led us to a further data cleaning. Tails analysis requires in
+fact defined values for the "skew" variables as well as data blocks
+which are big enough to have a "bulk" and a "tail". Thus, data for
+this analysis was further skimmed keeping only blocks with more than 5
+files, size larger than 300GB and with defined values for all the
+"skew" variables. This leaves us with a final set of roughly 42,000
+transfers entries which are the actual basis of our latency tail
+analysis.
