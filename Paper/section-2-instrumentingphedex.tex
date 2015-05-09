@@ -1,0 +1,25 @@
+\section{Instrumenting PhEDEx to collect latency data}
+The atomic unit for transfer operations in PhEDEx is the file block: an arbitrary group of O(100-1000) files in the same dataset.
+To achieve scalability, PhEDEx doesn't keep a permanent record of the states of individual files: all information is aggregated at the level of block after transfers are completed.
+
+This level of detail is sufficient for replica location, but it is not enough to identify problems that increase latency in block transfers: for example, there is no way to distinguish between the case of a high-latency transfer proceeding at a low regular rate, and the case of a transfer for which the latency is dominated by a few stuck files in the ``transfer tail''.
+
+For this reason, in 2012 we instrumented the central agents of PhEDEx with a detailed latency monitoring system \cite{phedexlatency}, collecting file-level information on transfers in historical monitoring tables to complement block-level information, and providing corresponding Data Service APIs to retrieve the monitoring data for further analysis.
+
+The BlockAllocator agent that is responsible for monitoring subscriptions records the timestamps of the main events related to block completion in the t\textunderscore dps\textunderscore block\textunderscore latency table: the time when the block was subscribed and the time when the last file in the block was successfully replicated at destination.
+The difference between these two timestamps can be defined as the total latency for block replication as experienced by users, which may also include time spent while the subscription was manually suspended by an operator.
+In this case, the agent also measures and records in the table the time elapsed during the suspension, and subtracting this value from the total latency we measure what we define as the ``PhEDEx latency'', i.e. introduced by PhEDEx itself and the underlying transfer infrastructure rather than human intervention.
+
+
+The FilePump agent responsible for collecting the results of transfer tasks records a summary of the transfer history of each file in the block in the t\textunderscore xfer\textunderscore file\textunderscore latency table, including the time when the file was first activated for routing, the time of the first transfer attempt and of the final successful transfer attempt, the number of transfer attempts needed for the file to arrive at destination, as well as the source node of the first and last transfer attempts (which may be different if the transfer was rerouted).
+
+
+
+For performance reasons, the entries in these live tables are archived to historical tables after the transfer is completed: file-level statistics into t\textunderscore log\textunderscore file\textunderscore latency, which is eventually cleaned up after 30 days, and block-level statistics into t\textunderscore log\textunderscore block\textunderscore latency, in which they are kept indefinitely and integrated with additional events related to block completion:
+\begin{itemize}
+\item the time when the first file in the block was routed for transfer
+\item the time when the first file in the block was successfully replicated at destination
+\item the times when 25\%/50\%/75\%/95\% of the files in the block were replicated at destination
+\item the time when the last file in the block was successfully replicated at destination
+\end{itemize}
+In addition, we record the total number of transfer attempts needed to transfer all files in the block, as well as the source node for the majority of files in the block.
