@@ -1,3 +1,0 @@
-In all CMS processing activities, the growth of a CMS dataset to be intended as a collection of files with specific physics content happens through the contribution of production efforts by different WLCG sites supporting the CMS workflows, and in many cases sites contributing to a dataset are not the final destination where such dataset is supposed to be stored. Hence, a PhEDEx subscription is made to a tape endpoint and possibly to some disk endpoints to gather all produced data into the needed places according to CMS policies. However, some of the blocks might be located at a problematic site that can cause latency in dataset level transfers.
-
-The underlying problem can be missing/corrupt files, or storage related problems as mentioned in other latency types.
