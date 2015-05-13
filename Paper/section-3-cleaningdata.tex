@@ -1,4 +1,4 @@
-\section{Cleaning Data and Defining Variables}
+\section{Cleaning data and defining variables}
 
 In the last two years, thanks to the instrumentation detailed in the
 previous session, the PhEDEX system collected records about the
@@ -54,22 +54,26 @@ following 4 sets of variables
 \begin{itemize}
 \item skew $X$ variables: 
   \begin{equation}
-  Skew_X=\frac{\left( \mbox{time spent transferring the LAST 5 percent of the files} \right)}{ \left( \mbox{time spent transferring the FIRST } X \mbox{ percent of the files} \right)} * \frac{X}{5} 
+  Skew_X=\frac{\left( \mbox{time spent transferring the LAST 5 percent of the files} \right)}{ \left( \mbox{time spent transferring the FIRST } X \mbox{ percent of the files} \right)} * \frac{X}{5}
+  \label{eq:skew}
    \end{equation}
    where $X=25,50,75,95$;
 \item skew last $X$ variables: 
   \begin{equation}
    SkewLast_X=\frac{\left( \mbox{time spent transferring the LAST 5 percent of the files}\right)}{\left(\mbox{time spent transferring the LAST } X \mbox{ percent of the files}\right)} * \frac{X}{5}
+  \label{eq:skewlast}
   \end{equation} 
    where $X=25,50,75$;
 \item reverse skew  $X$ variables: 
   \begin{equation}
     RSkew_X=\frac{\left( \mbox{time spent transferring the FIRST 25 percent of the files}\right)}{\left( \mbox{time spent transferring the FIRST }X \mbox{ percent of the files}\right)} *  \frac{X}{25} 
+  \label{eq:revskew}
   \end{equation}  
    where $X=50,75,95$;
 \item reverse skew last $X$ variables: 
   \begin{equation}
     RSkewLast_X=\frac{\left(\mbox{time spent transferring the FIRST 25 percent of the files}\right)}{ \left(\mbox{time spent transferring the LAST }X\mbox{ percent of the files}\right)} * \frac{X}{25} 
+  \label{eq:revskewlast}
   \end{equation}
    where $X=5,25,50,75$.
 \end{itemize}

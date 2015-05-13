@@ -1,0 +1,10 @@
+\section{Defining Different Types of Latency}
+
+Possible sources of latency, the signals we are looking for
+\begin{itemize}
+\item tails in large blocks due to stuck files
+\item small stuck blocks in large datasets with many blocks
+\item blocks that get stuck early in their transfer
+\item as many others as we can think of!
+\end{itemize}
+
