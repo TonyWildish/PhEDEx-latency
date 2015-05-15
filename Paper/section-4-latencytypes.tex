@@ -1,10 +1,59 @@
 \section{Types of latency}
 
-Possible sources of latency, the signals we are looking for
-\begin{itemize}
-\item tails in large blocks due to stuck files
-\item small stuck blocks in large datasets with many blocks
-\item blocks that get stuck early in their transfer
-\item as many others as we can think of!
-\end{itemize}
+At this point our analysis requires defining the different ways data
+transfers may be affected by latency issues and, if possible, the
+signatures of these latency types.  We make no claim to completeness
+and, at this stage, we just focus on three main cases.
 
+\subsubsection*{Tails}
+First of all let's consider block transfers that have ``tails''. That
+is: one or few files that take much longer to get transferred than the
+rest of the block. We can look for this type of latency by selecting
+transfers in which the time needed for moving the last 5\% of bytes is
+larger than a given threshold $\delta$.  To prevent very large blocks
+from being included even if they have no real latency issues we may
+add to $\delta$ an offset which depends from the size of the block and
+a reference speed parameter $v$.  In formulas
+
+\begin{equation}
+{\Delta}T_{last 5\%} > \delta + \frac{S}{20 v}
+\label{eq:early-stuck}
+\end{equation}
+where ${\Delta}T_{last 5\%}$ is the time of the last 5\% of replicas and
+$S$ the size of the block. Sensible values for the parameters are
+$v=5MB/s$ and $\delta=10h$.
+
+\subsubsection*{Early Stuck}
+Then we can consider block transfers that begin with serious
+performance issues and start flowing properly only after some time,
+presumably once such issues have been fixed. We may call such
+transfers ``early stuck''.  To find this type of latency we can select
+transfers in which the time for the first replica is larger than a
+given threshold $\delta$.  An offset which depends from the average
+size of the files and the reference rate parameter $v$ will prevent
+blocks with very big files to show up even if they have no latency
+issues. In formulas
+
+\begin{equation}
+{\Delta}T_{1st} > \delta + \frac{\langle S \rangle}{v}
+\label{eq:early-stuck}
+\end{equation}
+where ${\Delta}T_{1st}$ is the time of the first replica and $\langle
+S \rangle$ the average file size in the datablock. We can use again
+the values above as good estimations of $v$ and $\delta$.
+
+\subsubsection*{Many Small Blocks}
+If we take large datasets with many small (few files) blocks, we can
+consider the latency caused, at the dataset level, by some stuck
+blocks. This is much like the latency tails discussed above but
+replacing files by blocks and blocks by datasets.  This is another
+important latency type that we will not be able to analyze since it
+affects blocks of a type that we ruled out of our sample (they are
+below the size limit).
+
+\bigskip
+Despite this list of data types is clearly incomplete, we will see
+that it covers most of the real-life cases. In what follows we will in
+fact proceed in a more detailed analysis of the transfers affected by
+the latency types defined in this section. We will see which are their
+causes and their consequences on the CMS operations.
