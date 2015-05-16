@@ -23,21 +23,26 @@ the transfer of the very first file.
 \begin{figure}[htp]
 \centering
 \includegraphics{Figures/figure-71.pdf}
-\caption{}\label{fig:figure-7.1}
+\caption{Frequency histogram of the first file replica time (in hour)
+  for the transfers tagged as being ``early-stuck'' according to
+  eq.~\ref{eq:early-stuck}.}\label{fig:figure-7.1}
 \end{figure}
 
 These transfers are hence reported as stuck at 0\% completion for
-hours as shown in the figure~\ref{fig:figure-7.1}, so it is far easier
+hours as shown in fig.~\ref{fig:figure-7.1}, so it is far easier
 to detect them with respect to any other latency type.
 
-
-
-In addition, $SkewLast_{75}$ values (see eq.~\ref{eq:skewlast}) are quite small while $Skew_{25}$ (see eq.~\ref{eq:skewlast}) have quite large values in the figure~\ref{fig:figure-7.2} as expected.
+In addition, $SkewLast_{75}$ values (see eq.~\ref{eq:skewlast}) are
+quite small while $Skew_{25}$ (see eq.~\ref{eq:skewlast}) have quite
+large values in fig.~\ref{fig:figure-7.2} as expected.
 
 \begin{figure}[htp]
 \centering
 \includegraphics{Figures/figure-72.pdf}
-\caption{}\label{fig:figure-7.2}
+\caption{$Skew_{25}$ versus $SkewLast_{75}$ as defined in
+  eq.~\ref{eq:skew} and eq.~\ref{eq:skewlast}. For transfers tagged as
+  being ``early-stuck'' according to
+  eq.~\ref{eq:early-stuck}.}\label{fig:figure-7.2}
 \end{figure}
 
 The solution, however, is not straight-forward: it might require site

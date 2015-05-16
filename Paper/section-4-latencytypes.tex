@@ -1,4 +1,5 @@
 \section{Types of latency}
+\label{sec:types}
 
 At this point our analysis requires defining the different ways data
 transfers may be affected by latency issues and, if possible, the
@@ -17,7 +18,7 @@ a reference speed parameter $v$.  In formulas
 
 \begin{equation}
 {\Delta}T_{last 5\%} > \delta + \frac{S}{20 v}
-\label{eq:early-stuck}
+\label{eq:late-stuck}
 \end{equation}
 where ${\Delta}T_{last 5\%}$ is the time of the last 5\% of replicas and
 $S$ the size of the block. Sensible values for the parameters are

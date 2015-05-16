@@ -1,4 +1,5 @@
 \section{Latency of big blocks with long tails}
+\label{sec:tails}
 
 The extended CMS data production and processing tasks that run over
 the distributed WLCG infrastructure may occasionally produce corrupted
@@ -28,13 +29,18 @@ eq.~\ref{eq:skew}) in fig.~\ref{fig:figure-5.2}.
 \begin{figure}[htp]
 \centering
 \includegraphics{Figures/figure-51.pdf}
-\caption{}\label{fig:figure-5.1}
+\caption{Transfer rate of the last 5\% of the block vs rate of the
+  first 95\%. For transfers tagged as having latency tails according to
+  eq.~\ref{eq:late-stuck}.}\label{fig:figure-5.1}
 \end{figure}
 
 \begin{figure}[htp]
 \centering
 \includegraphics{Figures/figure-52.pdf}
-\caption{}\label{fig:figure-5.2}
+\caption{$RSkewLast_5$ versus $Skew_{95}$ as defined in
+  eq.~\ref{eq:revskewlast} and eq.~\ref{eq:skew}. For transfers tagged as
+  having latency tails according to
+  eq.~\ref{eq:late-stuck}.}\label{fig:figure-5.2}
 \end{figure}
 
 The underlying reasons for file production failures have been
@@ -48,7 +54,11 @@ fig.~\ref{fig:figure-5.3}.
 \begin{figure}[htp]
 \centering
 \includegraphics{Figures/figure-53.pdf}
-\caption{}\label{fig:figure-5.3}
+\caption{Block transfers counting, grouped by source and destination
+  Tier type. For all transfers (left) and for transfers tagged as having
+  latency tails according to eq.~\ref{eq:late-stuck} (right). We can
+  see that the contribution of Tier-0/1 sources is much
+  lower in the sample with latency issues.}\label{fig:figure-5.3}
 \end{figure}
 
 
