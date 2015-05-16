@@ -1,15 +1,27 @@
 \section{Latency of datasets with many small blocks}
 
-In all CMS processing activities, the growth of a CMS dataset to be
-intended as a collection of files with specific physics content
-happens through the contribution of production efforts by different
-WLCG sites supporting the CMS workflows, and in many cases sites
-contributing to a dataset are not the final destination where such
-dataset is supposed to be stored. Hence, a PhEDEx subscription is made
-to a tape endpoint and possibly to some disk endpoints to gather all
-produced data into the needed places according to CMS
-policies. However, some of the blocks might be located at a
-problematic site that can cause latency in dataset level transfers.
+In all CMS processing activities, datasets - to be intended as
+collections of files with specific physics content - are produced via
+the contribution of multiple WLCG sites supporting the CMS
+workflows. In most cases, the contributing sites are not the final
+destination where the dataset is supposed to be stored. Hence, a
+PhEDEx subscription is made to ship all data to a tape endpoint - and
+possibly to some disk endpoints - chosen according to CMS
+policies. However, some of the blocks might be located at sites having
+temporary network or storage problems which can cause a latency in
+the overall data placement task.
 
-The underlying problem can be missing/corrupt files, or storage
-related problems as mentioned in other latency types.
+Big datasets composed of many small blocks (few files per block) are
+particularly exposed to this kind of issues as the sources of blocks
+are multiple and may be particularly heterogeneous. This is much
+similar to the latency issues described in sec.~\ref{sec:tails} but on
+dataset/fileblock level rather than on fileblock/file level.
+
+As we said in sec.~\ref{sec:types}, the way our final set of latency
+data was selected does not allow us to study this kind of
+latencies. However, one way to detect these kind of latencies among
+the raw latency data provided by PhEDEx may be to select small group,
+aggregate information by dataset, calculate the transfer rate
+distribution of bocks within a dataset and look at the slow tails of
+such distributions. We leave this analysis for future work.
+
