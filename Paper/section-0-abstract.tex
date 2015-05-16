@@ -1,11 +1,35 @@
 \begin{abstract}
 
-During the first LHC run, the CMS experiment collected tens of Petabytes of collision and simulated data, which need to be distributed among dozens of computing centres with low latency in order to make efficient use of the resources. While the desired level of throughput has been successfully achieved, it is still common to observe transfer workflows that cannot reach full completion in a timely manner due to a small fraction of stuck files which require operator intervention.
+During the first LHC run, the CMS experiment collected tens of
+Petabytes of collision and simulated data, which need to be
+distributed among dozens of computing centres with low latency in
+order to make efficient use of the resources. While the desired level
+of throughput has been successfully achieved, it is still common to
+observe transfer workflows that cannot reach full completion in a
+timely manner due to a small fraction of stuck files which require
+operator intervention.
 
-For this reason, in 2012 the CMS transfer management system, PhEDEx, was instrumented with a monitoring system to measure file transfer latencies, and to predict the completion time for the transfer of a data set. The operators can detect abnormal patterns in transfer latencies while the transfer is still in progress, and monitor the long-term performance of the transfer infrastructure to plan the data placement strategy.
+For this reason, in 2012 the CMS transfer management system, PhEDEx,
+was instrumented with a monitoring system to measure file transfer
+latencies, and to predict the completion time for the transfer of a
+data set. The operators can detect abnormal patterns in transfer
+latencies while the transfer is still in progress, and monitor the
+long-term performance of the transfer infrastructure to plan the data
+placement strategy.
 
-Based on the data collected for one year with the latency monitoring system, we present a study on the different factors that contribute to transfer completion time. As case studies, we analyze several typical CMS transfer workflows, such as distribution of collision event data from CERN or upload of simulated event data from the Tier-2 centres to the archival Tier-1 centres. For each workflow, we present the typical patterns of transfer latencies that have been identified with the latency monitor.
+Based on the data collected for one year with the latency monitoring
+system, we present a study on the different factors that contribute to
+transfer completion time. As case studies, we analyze several typical
+CMS transfer workflows, such as distribution of collision event data
+from CERN or upload of simulated event data from the Tier-2 centres to
+the archival Tier-1 centres. For each workflow, we present the typical
+patterns of transfer latencies that have been identified with the
+latency monitor.
 
-We identify the areas in PhEDEx where a development effort can reduce the latency, and we show how we are able to detect stuck transfers which need operator intervention. We propose a set of metrics to alert about stuck subscriptions and prompt for manual intervention, with the aim of improving transfer completion times. 
+We identify the areas in PhEDEx where a development effort can reduce
+the latency, and we show how we are able to detect stuck transfers
+which need operator intervention. We propose a set of metrics to alert
+about stuck subscriptions and prompt for manual intervention, with the
+aim of improving transfer completion times.
 
 \end{abstract}
