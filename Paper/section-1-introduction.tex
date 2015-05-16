@@ -1,5 +1,30 @@
 \section{Introduction}
 \label{sec:intro}
 
-blah blah blah
-waffle waffle waffle
+The CMS experiment \cite{CMS} at the LHC accelerator is concluding the
+first Long Shutdown (LS1) after a successful first run of data taking
+(Run-1), with Run-2 starting in Summer 2015. In the original CMS
+Computing model \cite{CompModel}, one of the main concepts of the data
+management \cite{DataMgmt} was that jobs go where the data is, and no
+data moves in response to job submissions. In such model, the
+importance of adequate policies and tools for data placement is
+vital. Over the years, this motivated the CMS Computing project to
+design, build and operate a robust and reliable solution to perform
+transfers of massive volumes of data among computing centres of the
+Worldwide LHC Computing Grid (WLCG) \cite{WLCG,WLCG2}, called PhEDEx
+\cite{PhEDEx1, PhEDEx2, PhEDEx3, PhEDEx4}. PhEDEx is a reliable and
+scalable dataset replication system based on a central database on an
+Oracle instance running at CERN and a set of highly specialised,
+loosely-coupled, stateless software agents distributed at sites. In
+production for CMS since more than 10 years, PhEDEx moved 150 PB
+during Run-1, and it is currently moving about 2.5 PB per week among
+about 60 sites.  The PhEDEx design aims at providing the highest
+possible transfer completion rate, despite possible infrastructural
+unreliabilities, achieved via intelligent fail-over tactics and
+automatic retrials. During the several years of its operations,
+including the first LHC data taking period (Run-1) and the first LHC
+Long Shutdown (LS1), a large set of data concerning the latencies
+observed in all transfers between all Tiers has been collected. The
+study of this data set is allowing a categorisation of the different
+root sources of such latencies and shaping the strategy to attach this
+problem and increase the overall performance of the PhEDEx system.

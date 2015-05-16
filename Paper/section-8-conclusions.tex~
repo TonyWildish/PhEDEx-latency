@@ -1,0 +1,11 @@
+\section{Conclusions}
+\label{sec:conclusions}
+
+PhEDEx is one of the crucial components of the CMS Computing
+system. Proting of data collection and filtering since Run-1, the
+CMS Computing project has a large set of data concerning the latencies
+as observed in all transfers happening between all Tiers. The study of
+this data set has just started, but it is already allowing a
+categorisation of the different root sources of such latencies and
+shaping different strategies to attach the observed problem, and this
+increase the overall performance of the PhEDEx system for CMS.
